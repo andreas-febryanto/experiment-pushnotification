@@ -1,0 +1,29 @@
+{
+  "name": "experiment-pushnotification",
+  "version": "1.0.0",
+  "description": "implementation web push notification",
+  "main": "server.js",
+  "scripts": {
+    "clean": "[ -e .data/db.json ] && rm .data/db.json",
+    "start": "npm run clean; node server.js;"
+  },
+  "dependencies": {
+    "body-parser": "1.19.0",
+    "dotenv": "^16.0.1",
+    "express": "4.16.4",
+    "express-session": "1.16.2",
+    "lowdb": "1.0.0",
+    "web-push": "3.4.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andreas-febryanto/experiment-pushnotification.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andreas-febryanto/experiment-pushnotification/issues"
+  },
+  "homepage": "https://github.com/andreas-febryanto/experiment-pushnotification#readme"
+}
