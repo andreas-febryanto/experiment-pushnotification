@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Push notifications client</title>
+    <script src="../public/index.js" async></script>
+    <style>
+      button {
+        display: block;
+        margin-bottom: 10px;
+        min-width: 48px;
+        min-height: 48px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Push notifications client</h1>
+    <noscript>
+      You have JavaScript disabled. This app requires JavaScript to work.
+    </noscript>
+    <h2>Service worker</h2>
+    <textarea readonly id="registration-status-message">
+This browser doesn't support service workers.</textarea
+    >
+    <button id="register" onclick="registerServiceWorker()" disabled>
+      Register service worker
+    </button>
+    <button id="unregister" onclick="unregisterServiceWorker()" disabled>
+      Unregister service worker
+    </button>
+    <h2>Subscripton</h2>
+    <textarea readonly id="subscription-status-message">
+No push subscription is active.</textarea
+    >
+    <button id="subscribe" onclick="subscribeToPush()" disabled>
+      Subscribe to push
+    </button>
+    <button id="unsubscribe" onclick="unsubscribeFromPush()" disabled>
+      Unsubscribe from push
+    </button>
+    <h2>Notifications</h2>
+    <textarea readonly id="notification-status-message">
+No notifications sent yet.</textarea
+    >
+    <button id="notify-me" onclick="notifyMe()" disabled>
+      Notify current subscription
+    </button>
+    <button id="notify-all" onclick="notifyAll()">
+      Notify all subscriptions
+    </button>
+  </body>
+</html>
