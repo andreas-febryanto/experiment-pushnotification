@@ -1,6 +1,6 @@
 // Push notification logic.
 const VAPID_PUBLIC_KEY =
-  "BJ5IxJBWdeqFDJTvrZ4wNRu7UY2XigDXjgiUBYEYVXDudxhEs0ReOJRBcBHsPYgZ5dyV8VjyqzbQKS8V7bUAglk";
+  "BPinjg7Ih7ZjCb4v0UpOlfhwln94ihOo54XCwVGkMIavdJO_DnKt6lrrysjE1Dxd2OX-2zwrShxMnaE_iwhSpTg";
 const subscribeButton = document.getElementById("subscribe");
 const unsubscribeButton = document.getElementById("unsubscribe");
 const notifyMeButton = document.getElementById("notify-me");
