@@ -1,8 +1,12 @@
 // Push notification logic.
-const VAPID_PUBLIC_KEY = "public_key";
+const VAPID_PUBLIC_KEY =
+  "BJ5IxJBWdeqFDJTvrZ4wNRu7UY2XigDXjgiUBYEYVXDudxhEs0ReOJRBcBHsPYgZ5dyV8VjyqzbQKS8V7bUAglk";
 const subscribeButton = document.getElementById("subscribe");
 const unsubscribeButton = document.getElementById("unsubscribe");
 const notifyMeButton = document.getElementById("notify-me");
+
+subscribeButton.addEventListener("click", subscribeButtonHandler);
+unsubscribeButton.addEventListener("click", unsubscribeButtonHandler);
 
 async function registerServiceWorker() {
   await navigator.serviceWorker.register("../views/service-worker.js");
@@ -12,6 +16,16 @@ async function registerServiceWorker() {
 async function unregisterServiceWorker() {
   const registration = await navigator.serviceWorker.getRegistration();
   await registration.unregister();
+  updateUI();
+}
+
+async function subscribeToPush() {
+  const registration = await navigator.serviceWorker.getRegistration();
+  const subscription = await registration.pushManager.subscribe({
+    userVisibleOnly: true,
+    applicationServerKey: urlB64ToUint8Array(VAPID_PUBLIC_KEY),
+  });
+  postToServer("http://localhost:3000/add-subscription", subscription);
   updateUI();
 }
 
@@ -26,32 +40,24 @@ async function subscribeButtonHandler() {
   if (result === "granted") {
     console.info("The user accepted the permission request.");
   }
+  subscribeToPush();
+}
+
+async function unsubscribeFromPush() {
   const registration = await navigator.serviceWorker.getRegistration();
-  const subscribed = await registration.pushManager.getSubscription();
-  if (subscribed) {
-    console.info("User is already subscribed.");
-    notifyMeButton.disabled = false;
-    unsubscribeButton.disabled = false;
-    return;
+  const subscription = await registration.pushManager.getSubscription();
+  postToServer("http://localhost:3000/remove-subscription", {
+    endpoint: subscription.endpoint,
+  });
+  const unsubscribed = await subscription.unsubscribe();
+  if (unsubscribed) {
+    console.info("Successfully unsubscribed from push notifications.");
   }
-  const subscription = await registration.pushManager.subscribe({
-    userVisibleOnly: true,
-    applicationServerKey: urlB64ToUint8Array(VAPID_PUBLIC_KEY),
-  });
-  notifyMeButton.disabled = false;
-  fetch("/add-subscription", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(subscription),
-  });
-  console.log(`%c SUBSCRIPTION POST DATA`, `color: red`);
-  console.log(subscription);
+  updateUI();
 }
 
 async function unsubscribeButtonHandler() {
-  // TODO
+  unsubscribeFromPush();
 }
 
 // Convert a base64 string to Uint8Array.
@@ -85,11 +91,6 @@ if ("serviceWorker" in navigator && "PushManager" in window) {
 } else {
   console.error("Browser does not support service workers or push messages.");
 }
-
-subscribeButton.addEventListener("click", subscribeButtonHandler);
-unsubscribeButton.addEventListener("click", unsubscribeButtonHandler);
-
-// TODO add startup logic here
 
 // Logic for the "Notify me" and "Notify all" buttons.
 
@@ -179,4 +180,15 @@ async function updateUI() {
   notifyMeButton.disabled = false;
   unsubscriptionButton.disabled = false;
 }
+
+async function postToServer(url, data) {
+  let response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+}
+
 window.onload = updateUI;

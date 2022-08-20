@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const webpush = require("web-push");
 const bodyparser = require("body-parser");
 const low = require("lowdb");
@@ -23,19 +24,20 @@ function sendNotifications(subscriptions) {
 const app = express();
 app.use(bodyparser.json());
 app.use(express.static("public"));
+app.use(cors());
 
 app.post("/add-subscription", (request, response) => {
-  console.log("/add-subscription");
-  console.log(request.body);
-  console.log(`Subscribing ${request.body.endpoint}`);
-  db.get("subscriptions").push(request.body).write();
-  response.sendStatus(200);
-  response.sendStatus(200);
+  try {
+    db.get("subscriptions").push(request.body).write();
+    response.sendStatus(200);
+  } catch (error) {
+    console.log("\x1b[31m%s\x1b[0m", `error`);
+    console.log(error);
+  }
 });
 
 app.post("/remove-subscription", (request, response) => {
-  console.log("/remove-subscription");
-  console.log(request.body);
+  db.get("subscriptions").remove({ endpoint: request.body.endpoint }).write();
   response.sendStatus(200);
 });
 
