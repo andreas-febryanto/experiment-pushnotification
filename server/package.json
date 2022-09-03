@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "clean": "[ -e .data/db.json ] && rm .data/db.json",
-    "start": "node server.js;"
+    "start": "node server.js"
   },
   "dependencies": {
     "body-parser": "1.19.0",

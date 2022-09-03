@@ -8,14 +8,13 @@ const adapter = new FileSync("./data/db.json");
 const db = low(adapter);
 //generate VAPIDKeys
 // webpush.generateVAPIDKeys();
+require("dotenv").config();
 
 const vapidDetails = {
   publicKey: process.env.VAPID_PUBLIC_KEY,
   privateKey: process.env.VAPID_PRIVATE_KEY,
   subject: process.env.VAPID_SUBJECT,
 };
-require("dotenv").config();
-
 db.defaults({
   subscriptions: [],
 }).write();

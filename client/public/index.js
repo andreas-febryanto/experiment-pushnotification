@@ -20,13 +20,18 @@ async function unregisterServiceWorker() {
 }
 
 async function subscribeToPush() {
-  const registration = await navigator.serviceWorker.getRegistration();
-  const subscription = await registration.pushManager.subscribe({
-    userVisibleOnly: true,
-    applicationServerKey: urlB64ToUint8Array(VAPID_PUBLIC_KEY),
-  });
-  postToServer("http://localhost:3000/add-subscription", subscription);
-  updateUI();
+  try {
+    const registration = await navigator.serviceWorker.getRegistration();
+    const subscription = await registration.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: urlB64ToUint8Array(VAPID_PUBLIC_KEY),
+    });
+    postToServer("http://localhost:3000/add-subscription", subscription);
+    updateUI();
+  } catch (error) {
+    console.log(`%c error subscribeToPush`, `color: red`);
+    console.log(error);
+  }
 }
 
 async function subscribeButtonHandler() {
