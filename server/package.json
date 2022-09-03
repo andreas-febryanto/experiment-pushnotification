@@ -5,10 +5,11 @@
   "main": "server.js",
   "scripts": {
     "clean": "[ -e .data/db.json ] && rm .data/db.json",
-    "start": "npm run clean; node server.js;"
+    "start": "node server.js"
   },
   "dependencies": {
     "body-parser": "1.19.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "4.16.4",
     "express-session": "1.16.2",
